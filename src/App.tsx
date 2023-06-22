@@ -8,6 +8,7 @@ export default function App() {
       <button style={{ backgroundColor: newButtonColor }} onClick={() => setIsRed((prev) => !prev)}>
         {isRed ? "파란색으로 변경" : "빨간색으로 변경"}
       </button>
+      <input type="checkbox" />
     </div>
   );
 }
