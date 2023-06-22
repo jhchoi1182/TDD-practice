@@ -18,3 +18,13 @@ test("체크박스", () => {
   const checkBox = screen.getByRole("checkbox");
   expect(checkBox).not.toBeChecked();
 });
+
+test("체크 박스 선택 시 버튼 활성화 변경", () => {
+  render(<App />);
+  const button = screen.getByRole("button");
+  const checkBox = screen.getByRole("checkbox");
+  fireEvent.click(checkBox);
+  expect(button).toBeDisabled();
+  fireEvent.click(checkBox);
+  expect(button).toBeEnabled();
+});
