@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "../../../test-utils/test-utils";
 import OrderEntry from "../OrderEntry";
 import { rest } from "msw";
 import { server } from "../../../mocks/server";
@@ -9,7 +9,7 @@ test("스쿱 및 토핑 라우트를 핸들링", async () => {
     rest.get("http://localhost:3030/toppings", (req, res, ctx) => res(ctx.status(500)))
   );
   render(<OrderEntry />);
-  
+
   await waitFor(async () => {
     const alerts = await screen.findAllByRole("alert");
     expect(alerts).toHaveLength(2);
