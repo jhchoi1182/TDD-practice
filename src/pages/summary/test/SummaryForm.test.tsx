@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 test("체크 박스 기본 기능", async () => {
   const user = userEvent.setup();
 
-  render(<SummaryForm />);
+  render(<SummaryForm setOrderPhase={jest.fn()} />);
   const input = screen.getByRole("checkbox", { name: "I agree to Terms and Conditions" });
   const selectButton = screen.getByRole("button", { name: "Confirm order" });
   expect(input).not.toBeChecked();
@@ -21,7 +21,7 @@ test("체크 박스 기본 기능", async () => {
 test("popover 호버 기능 테스트", async () => {
   const user = userEvent.setup();
 
-  render(<SummaryForm />);
+  render(<SummaryForm setOrderPhase={jest.fn()} />);
   const nullPopover = screen.queryByText("No ice cream will actually be delivered");
   expect(nullPopover).not.toBeInTheDocument();
   const term = screen.getByText("Terms and Conditions");

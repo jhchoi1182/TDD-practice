@@ -8,7 +8,7 @@ test("스쿱 및 토핑 라우트를 핸들링", async () => {
     rest.get("http://localhost:3030/scoops", (req, res, ctx) => res(ctx.status(500))),
     rest.get("http://localhost:3030/toppings", (req, res, ctx) => res(ctx.status(500)))
   );
-  render(<OrderEntry />);
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
 
   await waitFor(async () => {
     const alerts = await screen.findAllByRole("alert");

@@ -50,11 +50,9 @@ describe("grand total", () => {
   test("스쿱을 먼저 추가했을 때 제대로 업데이트 되는지 테스트", async () => {
     const user = userEvent.setup();
 
-    const { unmount } = render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
     const grandTotal = screen.getByRole("heading", { name: /Grand total: \$/ });
     expect(grandTotal).toHaveTextContent("0.00");
-
-    unmount();
 
     const vanillaInput = await screen.findByRole("spinbutton", {
       name: "Vanilla",
@@ -72,7 +70,7 @@ describe("grand total", () => {
 
   test("토핑을 먼저 추가했을 때 제대로 업데이트 되는지 테스트", async () => {
     const user = userEvent.setup();
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
     const grandTotal = screen.getByRole("heading", { name: /Grand total: \$/ });
 
     const cherriesCheckbox = await screen.findByRole("checkbox", {
@@ -91,7 +89,7 @@ describe("grand total", () => {
 
   test("항목이 제거됐을 때 제대로 업데이트 되는지 테스트", async () => {
     const user = userEvent.setup();
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
 
     const cherriesCheckbox = await screen.findByRole("checkbox", {
       name: "Cherries",
