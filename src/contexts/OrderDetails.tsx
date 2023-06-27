@@ -4,19 +4,24 @@ import { pricePerItem } from "../constants";
 export interface ScoopCounts {
   Chocolate: number;
   Vanilla: number;
+  "Mint chip": number;
+  "Salted caramel": number;
 }
 export interface ToppingCounts {
   Cherries: number;
   "M&Ms": number;
   "Hot fudge": number;
+  "Peanut butter cups": number;
+  "Gummi bears": number;
+  Mochi: number;
 }
 interface OptionCounts {
   scoops: ScoopCounts;
   toppings: ToppingCounts;
 }
 const initialState: OptionCounts = {
-  scoops: { Chocolate: 0, Vanilla: 0 },
-  toppings: { Cherries: 0, "M&Ms": 0, "Hot fudge": 0 },
+  scoops: { Chocolate: 0, Vanilla: 0, "Mint chip": 0, "Salted caramel": 0 },
+  toppings: { Cherries: 0, "M&Ms": 0, "Hot fudge": 0, "Peanut butter cups": 0, "Gummi bears": 0, Mochi: 0 },
 };
 
 const OrderDetails = createContext({

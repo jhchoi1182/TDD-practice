@@ -18,15 +18,19 @@ export default function Options({ optionType }: IOptions) {
   const { totals } = useOrderDetails();
 
   useEffect(() => {
+    const controller = new AbortController();
     axios
-      .get(`http://localhost:3030/${optionType}`)
+      .get(`http://localhost:3030/${optionType}`, { signal: controller.signal })
       .then((response) => setItems(response.data))
       .catch((error) => {
         setError(error);
       });
+    return () => {
+      controller.abort();
+    };
   }, [optionType]);
 
-  if (error) {
+  if (items.length === 0) {
     return <AlertBanner message="" variant="" />;
   }
   const title = optionType[0].toUpperCase() + optionType.slice(1).toLowerCase();

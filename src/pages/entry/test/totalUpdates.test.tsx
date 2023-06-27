@@ -1,6 +1,7 @@
 import { render, screen } from "../../../test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import Options from "../Options";
+import OrderEntry from "../OrderEntry";
 
 test("스쿱 변경되면 업데이트되는지", async () => {
   const user = userEvent.setup();
@@ -43,4 +44,73 @@ test("토핑 변경되면 업데이트되는지", async () => {
 
   await user.click(hotFudgeCheckbox);
   expect(toppingsTotal).toHaveTextContent("1.50");
+});
+
+describe("grand total", () => {
+  test("스쿱을 먼저 추가했을 때 제대로 업데이트 되는지 테스트", async () => {
+    const user = userEvent.setup();
+
+    const { unmount } = render(<OrderEntry />);
+    const grandTotal = screen.getByRole("heading", { name: /Grand total: \$/ });
+    expect(grandTotal).toHaveTextContent("0.00");
+
+    unmount();
+
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "2");
+    expect(grandTotal).toHaveTextContent("4.00");
+
+    const cherriesCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+    await user.click(cherriesCheckbox);
+    expect(grandTotal).toHaveTextContent("5.50");
+  });
+
+  test("토핑을 먼저 추가했을 때 제대로 업데이트 되는지 테스트", async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+    const grandTotal = screen.getByRole("heading", { name: /Grand total: \$/ });
+
+    const cherriesCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+    await user.click(cherriesCheckbox);
+    expect(grandTotal).toHaveTextContent("1.50");
+
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "2");
+    expect(grandTotal).toHaveTextContent("5.50");
+  });
+
+  test("항목이 제거됐을 때 제대로 업데이트 되는지 테스트", async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+
+    const cherriesCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+    await user.click(cherriesCheckbox);
+
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "2");
+
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "1");
+
+    const grandTotal = screen.getByRole("heading", { name: /Grand total: \$/ });
+    expect(grandTotal).toHaveTextContent("3.50");
+
+    await user.click(cherriesCheckbox);
+    expect(grandTotal).toHaveTextContent("2.00");
+  });
 });
